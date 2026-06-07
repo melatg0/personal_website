@@ -32,13 +32,27 @@ body {
   justify-content: space-between;
   margin-bottom: 44px;
 }
+/* square avatar next to the heading */
+.name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.name-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
   object-fit: cover;
   background: #fff;
   display: block;
+  flex-shrink: 0;
 }
 .avatar-fallback {
   background: repeating-linear-gradient(45deg, #fff, #fff 8px, var(--accent-soft) 8px, var(--accent-soft) 16px);
@@ -57,9 +71,15 @@ body {
   font-size: 2.3rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  margin-bottom: 22px;
 }
 .intro { margin-bottom: 40px; color: var(--ink); }
+
+.subtitle {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 0;
+}
 
 .section { margin-bottom: 36px; }
 .section h2 {
@@ -102,48 +122,9 @@ a:hover { color: var(--ink); }
   font-size: 0.95rem;
 }
 
-/* floating globe accent */
-.globe {
-  display: block;
-  margin: 8px 0 24px;
-  width: 256px;
-  height: auto;
-  border-radius: 50%;
-  animation: floaty 5s ease-in-out infinite;
-  pointer-events: none;
-}
-.globe-fallback {
-  width: 116px;
-  height: 116px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e8d6f6, var(--accent) 60%, #8f63ab);
-  display: block;
-  margin: 8px 0 24px;
-  position: relative;
-}
-.globe-fallback::after {
-  content: "🌍";
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.2rem;
-}
-
-@keyframes floaty {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-14px) rotate(3deg); }
-}
-
 @media (max-width: 520px) {
   body { font-size: 18px; }
   .wrap { padding: 48px 20px 110px; }
   .name { font-size: 2rem; }
-  .globe, .globe-fallback { width: 92px; height: auto; }
-}
-
-/* respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .globe { animation: none; }
+  .avatar { width: 130px; height: 130px; }
 }
