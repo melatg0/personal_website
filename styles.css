@@ -24,6 +24,7 @@ body {
   margin: 0 auto;
   padding: 72px 24px 120px;
 }
+.wrap.wide { max-width: 820px; }
 
 /* header */
 .top {
@@ -112,6 +113,79 @@ a:hover { color: var(--ink); }
 }
 .proj-title { font-weight: 600; font-size: 1.1rem; }
 .proj-desc { color: var(--ink-soft); font-size: 1rem; }
+
+/* back link on detail pages */
+.back {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 1rem;
+}
+.back:hover { color: var(--accent); }
+
+/* project detail article */
+.project-meta {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  margin-bottom: 28px;
+}
+.article h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  padding-bottom: 8px;
+  margin: 40px 0 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.article h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 26px 0 10px;
+}
+.article p { margin-bottom: 16px; }
+.article ul, .article ol { margin: 0 0 16px 22px; }
+.article li { margin-bottom: 6px; }
+
+/* tables */
+.table-scroll { overflow-x: auto; margin: 0 0 24px; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+}
+th, td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+thead th {
+  color: var(--ink-soft);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+
+/* figures */
+figure { margin: 0 0 30px; }
+figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: #fff;
+  display: block;
+}
+figcaption {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  line-height: 1.5;
+}
 
 /* footer */
 .foot {
