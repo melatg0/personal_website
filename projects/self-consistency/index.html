@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Melat · Self-Consistency</title>
+  <title>Melat · Self-CTRL</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
@@ -20,12 +20,33 @@
 
     <a class="back" href="../../projects.html">← all projects</a>
 
-    <h1 class="name">Self-Consistency</h1>
-    <p class="project-meta">Coming soon</p>
+    <h1 class="name">Self-CTRL</h1>
+    <p class="project-meta">
+      Self-Consistency Training with Reinforcement Learning · MIT CSAIL · Jacob Andreas Lab ·
+      <a href="https://arxiv.org/abs/2606.18327" target="_blank" rel="noopener">paper ↗</a>
+    </p>
 
     <article class="article">
       <h2>Overview</h2>
-      <p>Write-up coming soon. Check back shortly for details on this project.</p>
+      <p>
+        Language models often explain their behavior in ways that don't match what they actually do. This
+        project develops a policy-gradient method that trains models to be consistent between their
+        self-explanations and their behavior, so that a model's stated reasoning is a faithful account of
+        how it actually acts.
+      </p>
+      <p>
+        The approach improves joint consistency from 43% to 96%, and as a safety benefit, reduces the
+        HarmBench failure rate from 15.0% to 0.5%. The work is written up in
+        <em><a href="https://arxiv.org/abs/2606.18327" target="_blank" rel="noopener">Self-CTRL:
+        Self-Consistency Training with Reinforcement Learning</a></em>.
+      </p>
+
+      <h2>Highlights</h2>
+      <ul>
+        <li>Policy-gradient training that aligns model explanations with model behavior.</li>
+        <li>Joint consistency improved from 43% to 96%.</li>
+        <li>HarmBench failure rate reduced from 15.0% to 0.5%.</li>
+      </ul>
     </article>
 
     <footer class="foot">

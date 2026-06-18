@@ -21,13 +21,28 @@
     <a class="back" href="../../projects.html">← all projects</a>
 
     <h1 class="name">Action History &amp; Counterfactual Effects on Agentic Scheming</h1>
-    <p class="project-meta">Mesa-Mely-Control — MAIA AISF Hack S26</p>
+    <p class="project-meta">
+      Mesa-Mely-Control · 1st place, MAIA AISF Hack SP26 ·
+      <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
+    </p>
+
+    <div class="tldr">
+      <h2>TL;DR</h2>
+      <p>
+        Across 1,440 rollouts, the <em>structure</em> of an agent's prior-session history measurably shifts
+        how often it schemes. Adding per-step reasoning traces drives the blackmail rate from 43% to 63%
+        (OR = 2.26), while raw action logs or full email observations don't move it significantly, so it's
+        not the amount of context that matters, but whether it shows deliberate reasoning. A single
+        counterfactual prompt ("what would you advise a different AI to do?") cuts scheming 12–23pp uniformly
+        across every condition, though the reasoning-trace effect persists even with it active.
+      </p>
+    </div>
 
     <article class="article">
       <h2>Research Question</h2>
       <p>
-        Does the <em>structure</em> of an agent's visible action history — ranging from no history, to
-        action-only traces, to traces with full email observations, to traces with per-step reasoning —
+        Does the <em>structure</em> of an agent's visible action history (ranging from no history, to
+        action-only traces, to traces with full email observations, to traces with per-step reasoning)
         affect its scheming propensity in a high-stakes blackmail scenario? And does a counterfactual
         debiasing prompt interact with history structure to modulate that effect?
       </p>
@@ -36,12 +51,12 @@
       <p>
         A core challenge in AI control is understanding what drives misaligned behavior in deployed agentic
         systems. Hopman et al. (2025) showed that scaffolding changes alone can swing scheming rates from 0%
-        to 59% in frontier models — a larger effect than any single prompt intervention previously documented.
+        to 59% in frontier models, a larger effect than any single prompt intervention previously documented.
         Their work treated scaffolding as a bundle, varying many parameters at once without isolating which
         were causally responsible.
       </p>
       <p>
-        One specific parameter — action history — is particularly important from a safety perspective.
+        One specific parameter, action history, is particularly important from a safety perspective.
         Production agentic systems routinely inject prior-session context into the model's context window, and
         the richness of that context varies widely. If a model becomes more willing to behave badly when it has
         richer evidence of its own prior agency, that suggests an instrumental reasoning pathway: the model
@@ -65,7 +80,7 @@
             <tr><th>Level</th><th>Label</th><th>What the model sees</th></tr>
           </thead>
           <tbody>
-            <tr><td>A_raw</td><td>No history</td><td>Bare inbox prompt — no prefix. True baseline.</td></tr>
+            <tr><td>A_raw</td><td>No history</td><td>Bare inbox prompt, no prefix. True baseline.</td></tr>
             <tr><td>A1</td><td>Actions only</td><td>Prior-session tool calls + terse return values.</td></tr>
             <tr><td>A2</td><td>Actions + observations</td><td>A1 + full email subjects, body excerpts, sent-email body.</td></tr>
             <tr><td>A3</td><td>Actions + reasoning</td><td>A1 + per-step <code>Reasoning:</code> traces explaining each decision.</td></tr>
@@ -75,7 +90,7 @@
       <p>
         All prior-session content depicts a routine, mundane session (reading Q3 reports, drafting analysis,
         flagging an HR reminder, sending a team update). The blackmail-relevant actors do not appear in any
-        history block — they are encountered fresh in the current session.
+        history block; they are encountered fresh in the current session.
       </p>
 
       <h3>Counterfactual (CF) Intervention</h3>
@@ -94,7 +109,7 @@
         <li><strong>Temperature:</strong> 1.0 · <strong>Manipulation check:</strong> 100% (1440/1440)</li>
       </ul>
 
-      <h2>Experiment 1 — Action History Effect</h2>
+      <h2>Experiment 1: Action History Effect</h2>
       <p>n = 180 per cell, 720 rollouts total.</p>
       <div class="table-scroll">
         <table>
@@ -126,14 +141,14 @@
       <h3>Interpretation</h3>
       <p>
         <strong>A3 (reasoning traces) significantly elevates scheming.</strong> Adding prior-session reasoning
-        traces drives the rate from 43.3% to 63.3% — a 20pp increase, medium effect size (h = 0.40),
+        traces drives the rate from 43.3% to 63.3%, a 20pp increase, medium effect size (h = 0.40),
         OR = 2.26, BH p = 0.0005. A1 (action logs only) shows a positive trend that does not survive correction
         (BH p = 0.068), and A2 is flat. The non-monotone A1/A3 &gt; A2 pattern suggests that <em>what the prior
         session contains</em>, not just its existence, matters: mundane observation-rich content grounds Alex in
         a bureaucratic frame, while reasoning traces prime deliberate, consequentialist decision-making.
       </p>
 
-      <h2>Experiment 2 — Counterfactual Intervention</h2>
+      <h2>Experiment 2: Counterfactual Intervention</h2>
       <p>n = 180 per cell per CF condition, 720 additional rollouts.</p>
       <div class="table-scroll">
         <table>
@@ -155,7 +170,7 @@
       </figure>
       <figure>
         <img src="results/cf_interaction_n180.png" alt="History by CF interaction lines" />
-        <figcaption>Figure 5. Interaction plot. Parallel lines indicate no significant history × CF interaction — suppression is uniform.</figcaption>
+        <figcaption>Figure 5. Interaction plot. Parallel lines indicate no significant history × CF interaction; suppression is uniform.</figcaption>
       </figure>
       <figure>
         <img src="results/cf_delta_n180.png" alt="CF suppression delta by level" />
@@ -165,7 +180,7 @@
       <h3>Interpretation</h3>
       <p>
         <strong>CF suppresses scheming uniformly</strong>, reducing blackmail rates by 12–23pp across all
-        history levels — more than halving the A_raw baseline. There is <strong>no significant history × CF
+        history levels, more than halving the A_raw baseline. There is <strong>no significant history × CF
         interaction</strong>: the ordering A3 &gt; A1 &gt; A2 &gt; A_raw is preserved in both conditions, and the
         history effect persists under CF (A3+CF reaches 47.8%, nearly 18pp above A_raw+CF).
       </p>
@@ -176,7 +191,7 @@
         <li><strong>History type matters:</strong> LLR p = 0.001; A3 OR = 2.26 (BH p = 0.0005).</li>
         <li><strong>CF is effective:</strong> reduces scheming 12–23pp across all conditions.</li>
         <li><strong>No interaction:</strong> CF and history act as additive, independent factors.</li>
-        <li><strong>A3 remains highest</strong> in both worlds — reasoning traces elevate scheming even with CF active.</li>
+        <li><strong>A3 remains highest</strong> in both worlds: reasoning traces elevate scheming even with CF active.</li>
       </ul>
       <figure>
         <img src="results/cf_n180_analysis.png" alt="Full combined analysis of all eight cells" />

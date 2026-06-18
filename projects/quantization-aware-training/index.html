@@ -1,0 +1,583 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<link rel="shortcut icon" href="images/icon.ico">
+<style type="text/css">
+	body {
+		background-color: #f5f9ff;
+	}
+
+	/* Hide both math displays initially, will display based on JS detection */
+  .mathjax-mobile, .mathml-non-mobile { display: none; }
+
+  /* Show the MathML content by default on non-mobile devices */
+  .show-mathml .mathml-non-mobile { display: block; }
+  .show-mathjax .mathjax-mobile { display: block; }
+
+	.content-margin-container {
+		display: flex;
+		width: 100%; /* Ensure the container is full width */
+		justify-content: left; /* Horizontally centers the children in the container */
+		align-items: center;  /* Vertically centers the children in the container */
+	}
+	.main-content-block {
+		width: 70%; /* Change this percentage as needed */
+    max-width: 1100px; /* Optional: Maximum width */
+		background-color: #fff;
+		border-left: 1px solid #DDD;
+		border-right: 1px solid #DDD;
+		padding: 8px 8px 8px 8px;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+	}
+	.margin-left-block {
+			font-size: 14px;
+			width: 15%; /* Change this percentage as needed */
+			max-width: 130px; /* Optional: Maximum width */
+			position: relative;
+			margin-left: 10px;
+			text-align: left;
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+			padding: 5px;
+	}
+	.margin-right-block {
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir";
+			font-size: 14px;
+			width: 25%; /* Change this percentage as needed */
+			max-width: 256px; /* Optional: Maximum width */
+			position: relative;
+			text-align: left;
+			padding: 10px;  /* Optional: Adds padding inside the caption */
+	}
+
+	img {
+			max-width: 100%; /* Make sure it fits inside the container */
+			height: auto;
+			display: block;
+			margin: auto;
+	}
+	.my-video {
+			max-width: 100%; /* Make sure it fits inside the container */
+			height: auto;
+			display: block;
+			margin: auto;
+	}
+	/* Hide both video displays initially, will display based on JS detection */
+  .vid-mobile, .vid-non-mobile { display: none; }
+
+  /* Show the video content by default on non-mobile devices */
+  .show-vid-mobile .vid-mobile { display: block; }
+  .show-vid-non-mobile .vid-non-mobile { display: block; }
+
+	a:link,a:visited
+	{
+		color: #0e7862; /*#1367a7;*/
+		text-decoration: none;
+	}
+	a:hover {
+		color: #24b597; /*#208799;*/
+	}
+
+	h1 {
+		font-size: 18px;
+		margin-top: 4px;
+		margin-bottom: 10px;
+	}
+
+	table.header {
+    font-weight: 300;
+    font-size: 17px;
+    flex-grow: 1;
+		width: 70%;
+    max-width: calc(100% - 290px); /* Adjust according to the width of .paper-code-tab */
+	}
+	table td, table td * {
+	    vertical-align: middle;
+	    position: relative;
+	}
+	table.paper-code-tab {
+	    flex-shrink: 0;
+	    margin-left: 8px;
+	    margin-top: 8px;
+	    padding: 0px 0px 0px 8px;
+	    width: 290px;
+	    height: 150px;
+	}
+
+	.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		        0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		        5px 5px 0 0px #fff, /* The second layer */
+		        5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		        10px 10px 0 0px #fff, /* The third layer */
+		        10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+		margin-top: 5px;
+		margin-left: 10px;
+		margin-right: 30px;
+		margin-bottom: 5px;
+	}
+
+	hr {
+    height: 1px; /* Sets the height of the line to 1 pixel */
+    border: none; /* Removes the default border */
+    background-color: #DDD; /* Sets the line color to black */
+  }
+
+	div.hypothesis {
+		width: 80%;
+		background-color: #EEE;
+		border: 1px solid black;
+		border-radius: 10px;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		font-family: Courier;
+		font-size: 18px;
+		text-align: center;
+		margin: auto;
+		padding: 16px 16px 16px 16px;
+	}
+
+	div.citation {
+    font-size: 0.8em;
+    background-color:#fff;
+    padding: 10px;
+		height: 200px;
+  }
+
+	.fade-in-inline {
+		position: absolute;
+		text-align: center;
+		margin: auto;
+		-webkit-mask-image: linear-gradient(to right,
+																			transparent 0%,
+																			transparent 40%,
+																			black 50%,
+																			black 90%,
+																			transparent 100%);
+		mask-image: linear-gradient(to right,
+																transparent 0%,
+																transparent 40%,
+																black 50%,
+																black 90%,
+																transparent 100%);
+		-webkit-mask-size: 8000% 100%;
+		mask-size: 8000% 100%;
+		animation-name: sweepMask;
+		animation-duration: 4s;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+		animation-delay: -1s;
+	}
+
+	.fade-in2-inline {
+			animation-delay: 1s;
+	}
+
+	.inline-div {
+			position: relative;
+	    display: inline-block; /* Makes both the div and paragraph inline-block elements */
+	    vertical-align: top; /* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
+	    width: 50px; /* Optional: Adds space between the div and the paragraph */
+	}
+
+</style>
+
+	  <title>Scheduled Quantization-Aware Training as a Full-Precision Regularizer</title>
+      <meta property="og:title" content="Scheduled Quantization-Aware Training as a Full-Precision Regularizer" />
+			<meta charset="UTF-8">
+  </head>
+
+  <body>
+
+		<div class="content-margin-container">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<table class="header" align=left>
+								<tr>
+									<td colspan=4>
+										<span style="font-size: 32px; font-family: 'Courier New', Courier, monospace; /* Adds fallbacks */">Scheduled Quantization-Aware Training as a Full-Precision Regularizer</span>
+									</td>
+								</tr>
+								<tr>
+										<td align=left>
+												<span style="font-size:17px"><a href="your_website">Abimalek Mekuriya </a></span>
+										</td>
+										<td align=left>
+												<span style="font-size:17px"><a href="your_partner's_website">Melat Ghebreselassie</a></span>
+										</td>
+								<tr>
+									<td colspan=4 align=left><span style="font-size:18px">Final project for 6.7960, MIT</span></td>
+								</tr>
+						</table>
+					</div>
+					<div class="margin-right-block">
+					</div>
+		</div>
+
+		<div class="content-margin-container" id="intro">
+				<div class="margin-left-block">
+          <!-- table of contents here -->
+          <div style="position:fixed; max-width:inherit; top:max(20%,120px)">
+              <b style="font-size:16px">Outline</b><br><br>
+              <a href="#intro">Introduction</a><br><br>
+              <a href="#background">Background</a><br><br>
+              <a href="#methods">Methods</a><br><br>
+              <a href="#results">Results</a><br><br>
+              <a href="#discussion">Discussion</a><br><br>
+          </div>
+				</div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+    <div class="content-margin-container" id="intro">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<h2>Introduction</h2>
+            As deep neural networks grow in width, depth, and parameter count, they become increasingly prone to memorization and poor out-of-distribution generalization. Regularization techniques address these challenges by constraining the solution space or injecting noise into the optimization processes so that models converge to smoother, flatter minima. Classical approaches, such as L2 weight decay <a href="#ref_1">[1]</a>, dropout <a href="#ref_2">[2]</a>, and batch normalization <a href="#ref_3">[3]</a>, demonstrate that even simple forms of noise injection or parameter penalization can significantly improve generalization. 
+			<br></br>
+
+Quantization-Aware Training (QAT) <a href="#ref_6">[6]</a>
+ can be seen under this perspective as it simulates low-precision effects during training through fake quantization operators that mimic discretization. Although QAT is typically used to recover accuracy in low-bit models by optimizing full-precision “latent” weights using their quantized counterparts in the forward and backward pass, studies <a href="#ref_7">[7]</a> have observed that QAT also regularized the quantized model. QAT is predominantly viewed as a means of improving the accuracy of quantized models, with its influence on the underlying full-precision parameters, those actually being optimized during training, receiving comparatively little attention. This is notable because the gradients used to update full-precision weights are computed through quantized forward passes, meaning quantization noise directly shapes the optimization trajectory.
+			<br></br>
+Here we explore scheduled QAT as a regularizer, keeping weights in full-precision while progressively adjusting quantization strength over training epochs. By comparing deterministic and stochastic rounding under different scheduling strategies (linear, geometric, cosine), we examine whether scheduled quantization noise can regularize models, improve generalization, and outperform conventional methods such as weight decay.
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="does_x_do_y">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block" id="background">
+					<h2>Background</h2>
+					<b>Quantization and Rounding</b>
+					<br>
+					Quantization restricts neural network weights or activations to a discrete set of representable values. A real-valued scalar x is typically mapped to
+
+          <br>
+  <math xmlns="http://www.w3.org/1998/Math/MathML">
+    <mrow>
+      <mover>
+        <mi>x</mi>
+        <mo>^</mo>
+      </mover>
+      <mo>=</mo>
+      <mrow>
+        <mi>s</mi>
+        <mo>&#x22C5;</mo>
+        <mi>round</mi>
+        <mo>(</mo>
+        <mfrac>
+          <mi>x</mi>
+          <mi>s</mi>
+        </mfrac>
+        <mo>)</mo>
+        <mo>+</mo>
+        <mi>z</mi>
+      </mrow>
+    </mrow>
+  </math>, where s is a scale factor and z is a zero-point <a href="#ref_6">[6]</a>. Most systems use uniform quantization, which places values on an evenly spaced grid.
+<br></br>
+Deterministic rounding maps values to the nearest grid point, introducing a predictable but biased error. Stochastic rounding instead selects between neighboring levels with probability proportional to their distances from x, making the quantized value unbiased in expectation and allowing small updates to persist even at very low precision <a href="#ref_4">[4]</a>.
+<br>
+<br></br>
+<b>Straight-Through Estimator (STE)</b>
+<br>
+During training with quantization, gradients can no longer flow through discrete rounding operations. The Straight-Through Estimator (STE) <a href="#ref_8">[8]</a> approximates the derivative of these non-differentiable functions by treating rounding as the identity during backpropagation. This allows approximate gradients to propagate despite quantization in the forward pass, enabling practical training with quantized activations or weights.
+<br></br>
+<b>Curriculum Learning</b>
+<br>
+Curriculum learning refers to training strategies that vary the difficulty or character of the learning conditions over time, rather than presenting the model with a uniform setting throughout <a href="#ref_10">[10]</a>. The central idea is that models may benefit from encountering structured phases, starting with “easier” conditions and progressing toward more challenging ones. We apply this same principle to quantization by scheduling varies bit-precisions over time in QAT, letting us examine whether structured shifts in numerical precision act as a full-precision regularizer.
+
+		    </div>
+		    <div class="margin-right-block" style="transform: translate(0%, -100%);"> <!-- you can move the margin notes up and down with translate -->
+		    </div>
+		</div>
+
+		<div class="content-margin-container">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block" id="methods">
+            <h2>Methods</h2>
+</center>
+<br></br>
+
+            <h2 id="results">Results</h2>
+<b>Baseline</b>
+
+<div style="display: flex; justify-content: center; margin: 15px 0;">
+  <table style="
+      border-collapse: collapse;
+      font-family: 'Times New Roman', serif;
+      font-size: 13px;
+      text-align: center;
+  ">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #000; padding: 4px 8px;">run</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">train_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">val_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">gap_final</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">
+          ResNet-32 (FP, No WD)
+        </td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">1.000</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.798</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.202</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">
+          ResNet-32 (FP, WD 1e-4)
+        </td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">1.000</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.784</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.216</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+  <b>Table 1.</b>
+  Results of two FP (full-precision) ResNet-32 baselines on CIFAR-10:
+  <i>ResNet-32 (FP, No WD)</i> trained without explicit regularization, and
+  <i>ResNet-32 (FP, WD 1e-4)</i> trained with AdamW-style L2 weight decay, WD.
+</div>
+<br>
+Both baselines in <b>Table 1</b> reach perfect training accuracy, indicating substantial overparameterization. Generalization, however, remains limited: the no-WD model shows a 0.202 generalization gap, and the WD model has a slightly larger gap of 0.216. This suggests that, in this setting, WD does not clearly improve generalization and provides a useful baseline for evaluating whether quantization-induced noise behaves as an effective regularizer.
+<br></br>
+<b>Fixed Quantization</b>
+<br>
+To more systematically compare rounding schemes, we consider pairs of deterministic and stochastic experiments for each fixed bitwidth b ∈ {2,4,8,16}.
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 10px;">
+  <b>Generalization Gap Across Fixed Bit Quantization</b>
+</div>
+<img src="./images/fixedcomparison.png" width="512px/">
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+  <b>Figure 1.</b>
+  Full-precision validation accuracy and generalization gaps for deterministic and stochastic fixed-bitwidth runs (b ∈ {2, 4, 8, 16}). Each pair is identical in architecture, optimizer, and hyperparameters, differing only in rounding mode.
+</div>
+Across all fixed-bitwidth pairs, stochastic rounding reliably improves validation accuracy and typically reduces the generalization gap. The most pronounced difference appears at 4-bit, where the stochastic model reaches 85.6% validation accuracy with a 0.130 gap, compared to 80.7% and 0.147 for deterministic rounding. Stochastic fixed 4-bit quantization performs better than both (FP WD) and (FP, No WD) baselines with +5.8% higher validation accuracy and a -.072 lower generalization gap.
+<br></br>
+<b>Schedule Comparison</b>
+      <br>
+<br>
+A similar trend holds for the scheduled experiments. Since the fixed 4-bit setting provided the strongest regularization, all of our chosen schedules interpolate between full-precision (32-bit) and this low-precision regime.
+  Linear schedules adjust bit-width at evenly spaced epochs (4→8→16→32 at fixed intervals),
+  while geometric schedules change bit-width multiplicatively, causing later transitions to
+  occur closer together (4→8→16→32 but with compressed timing near the end of training).
+  The cosine schedule smoothly decays bit-width from 4→32→4 across all 50 epochs.
+Each schedule is run with both deterministic and stochastic rounding to separate the influence of schedule shape from the rounding rule.
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 10px;">
+  <b>Scheduled Deterministic Quantization Results (ResNet-32, CIFAR-10)</b>
+</div>
+<div style="display: flex; justify-content: center; margin: 20px 0;">
+  <table style="
+      border-collapse: collapse;
+      font-family: 'Times New Roman', serif;
+      font-size: 13px;
+      text-align: center;
+  ">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #000; padding: 4px 8px;">schedule</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_train_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_val_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_gap_final</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Geometric (4 → 32)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.987</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.809</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.178</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Cosine (16 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.725</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.636</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.089</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Geometric (32 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.833</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.708</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.125</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Linear (32 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.905</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.749</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.156</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Linear (4 → 32)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.998</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.745</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.253</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+  <b>Table 2.</b>
+  FP (full-precision) accuracy results for deterministic scheduled quantization runs on CIFAR-10. Geometric (4->32) had the highest validation accuracy, while Cosine and Linear schedules had lower generalization gaps but lower validation accuracy.
+</div>
+<br></br>
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 10px;">
+  <b>Scheduled Stochastic Quantization Results (ResNet-32, CIFAR-10)</b>
+</div>
+
+<div style="display: flex; justify-content: center; margin: 20px 0;">
+  <table style="
+      border-collapse: collapse;
+      font-family: 'Times New Roman', serif;
+      font-size: 13px;
+      text-align: center;
+  ">
+    <thead>
+      <tr>
+        <th style="border: 1px solid #000; padding: 4px 8px;">schedule</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_train_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_val_final</th>
+        <th style="border: 1px solid #000; padding: 4px 8px;">fp_gap_final</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Geometric (4 → 32)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">1.000</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.848</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.152</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Geometric (32 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.907</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.796</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.111</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Linear (32 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.924</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.807</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.117</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Linear (4 → 32)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">1.000</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.825</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.175</td>
+      </tr>
+
+      <tr>
+        <td style="border: 1px solid #000; padding: 4px 8px;">Cosine (16 → 4)</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.958</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.807</td>
+        <td style="border: 1px solid #000; padding: 4px 8px;">0.150</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+  <b>Table 3.</b>
+  FP (full-precision) results for stochastic scheduled quantization runs.  
+  Schedules follow the same linear, geometric, and cosine structures described in Table 2,
+  but use stochastic rounding during quantized operations. Similarly, stochastic geometric (4->32) had the highest validation accuracy with a relatively low generalization gap.
+</div>
+<br></br>
+Stochastic rounding generally offers a better trade-off: it preserves or improves test accuracy while reducing or maintaining the generalization gap.
+<br></br>
+The stochastic geometric (4→32) schedule is the best-performing configuration, which starts at low precision and increases bitwidth over time: it reaches 100% training accuracy and 84.8% validation accuracy, with a gap of 0.152. The stochastic geometric (32→4) and linear (32→4) schedules also perform competitively, with validation accuracies of 79.6% and 80.7% and relatively small gaps (0.111 and 0.117 respectively), though with much lower validation accuracies.
+<br></br>
+Among deterministic schedules, the geometric backward run attains 100% training accuracy and 84.1% validation accuracy with a gap of 0.159-substantially better than the deterministic linear schedules and the deterministic cosine schedule, both of which either underfit (low validation accuracy) or suffer from larger gaps.
+<br></br>
+<b>Can Scheduled QAT act as a Regularizer?</b>
+<br>
+To evaluate whether quantization-aware training acts as a useful regularizer for the full-precision model, we compare our best QAT runs to the full-precision baseline.
+
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 16px; margin-top: 10px;">
+<b>Effect of Quantization on Model Generalization</b>
+</div>
+<img src="./images/baseline_best_graph.png" width="1000px/">
+<div style="text-align: center; font-family: 'Times New Roman', serif; font-size: 13px; margin-top: 6px;">
+  <b>Figure 2.</b>
+  Training accuracy, validation accuracy, and generalization gap for full-precision baselines (with/without weight decay) compared to stochastic 4-bit fixed quantization and a stochastic geometric (4→32) schedule. These quantized models exhibit consistently smaller generalization gaps and slightly higher validation accuracy than the full-precision baselines.
+</div>
+<br>
+We find that quantization-aware training can be deployed as a full-precision regularizer. 
+<br></br>
+Across all the runs, the strongest gains in validation accuracy and reductions in generalization gap come from schedules that start in a highly quantized (low-bit) regime then gradually relax the bitwidth over time or are consistently highly quantized. The stochastic and deterministic geometric (4→32) schedules consistently outperform schedules that do the reverse and only introduce strong quantization late in training.
+<br></br>
+<h2 id="discussion">Future Work</h2>
+Several directions follow from these findings. A key next step is to directly test whether schedules such as 2→32 can reproduce the regularization benefits of strong fixed-bit training while substantially reducing overall compute. If early extreme quantization provides most of the regularization effect, this would imply that schedule design, not exhaustive fixed-bit experimentation, can determine the effective strength of quantization-based regularization, potentially yielding a significantly more efficient training pipeline. 
+
+
+
+
+
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="implications_and_limitations">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+		    </div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container" id="citations">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
+						<div class='citation' id="references" style="height:auto"><br>
+							<span style="font-size:16px">References:</span><br><br>
+							<a id="ref_1"></a>[1] <a href="https://proceedings.neurips.cc/paper/1991/file/8eefcfdf5990e441f0fb6f3fad709e21-Paper.pdf">A Simple Weight Decay Can Improve Generalization</a>, Krogh & Hertz, 1991<br><br>
+							<a id="ref_2"></a>[2] <a href="https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from Overfitting</a>, Srivastava et al., 2014<br><br>
+							<a id="ref_3"></a>[3] <a href="https://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a>, Ioffe & Szegedy, 2015<br><br>
+							<a id="ref_4"></a>[4] <a href="https://arxiv.org/abs/1502.02551">Deep Learning with Limited Numerical Precision</a>, Gupta et al., 2015<br><br>
+							<a id="ref_5"></a>[5] <a href="https://arxiv.org/abs/2209.05433">FP8 Formats for Deep Learning</a>, Micikevicius et al., 2022<br><br>
+							<a id="ref_6"></a>[6] <a href="https://arxiv.org/pdf/1712.05877">Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference</a>, Jacob et al., 2017<br><br>
+							<a id="ref_7"></a>[7] <a href="https://arxiv.org/abs/2404.11769">QGen: On the Ability to Generalize in Quantization Aware Training</a>, Askari Hemmat et al., 2024<br><br>
+							<a id="ref_8"></a>[8] <a href="https://arxiv.org/abs/1903.05662">Understanding Straight-Through Estimator in Training Activation Quantized Neural Nets</a>, Yin et al., 2019<br><br>
+							<a id="ref_9"></a>[9] <a href="https://arxiv.org/abs/1902.08153">Learned Step Size Quantization</a>, Esser et al., 2019<br><br>
+							<a id="ref_10"></a>[10] <a href="https://dl.acm.org/doi/10.1145/1553374.1553380">Curriculum learning</a>, Bengio, Louradour, Collobert & Weston, 2009<br><br>
+							<a id="ref_11"></a>[11] <a href="https://arxiv.org/abs/1703.06229">Curriculum Dropout</a>, Morerio, Cavazza, Volpi, Vidal & Murino, 2017 
+arxiv.org
+<br><br>
+						</div>
+		    </div>
+		    <div class="margin-right-block">
+            <!-- margin notes for reference block here -->
+		    </div>
+		</div>
+
+	</body>
+
+</html>
