@@ -307,7 +307,20 @@ Curriculum learning refers to training strategies that vary the difficulty or ch
 				</div>
 		    <div class="main-content-block" id="methods">
             <h2>Methods</h2>
-</center>
+Quantization is applied at the weight level using a straight-through estimator (STE). During the forward pass, weights are mapped to a discrete grid determined by the current bitwidth, while gradients flow to the underlying full-precision parameters. We experiment with several epoch-dependent bitwidth schedules, including linear schedules, where transitions between bitwidths occur at evenly spaced epochs, and geometric schedules, where each successive transition occupies roughly half the remaining training budget (for example, epochs allocated in ratios 1/2, 1/4, 1/8, …). These schedules are instantiated in both forward (increasing precision) and backward (decreasing precision) directions. We also implement a cosine schedule that smoothly oscillates between (4→16→4) bitwidths. We run experiments for every schedule chosen twice: once with stochastic and deterministic rounding.
+<br></br>
+We use a standard asymmetric uniform quantizer where the b-bit quantized value is obtained by:
+<div style="text-align:center; font-family:'Courier New',Courier,monospace; font-size:15px; margin:12px 0;">
+  q = clip( &lfloor;x / scale + zp&rceil;, q<sub>min</sub>, q<sub>max</sub> )
+</div>
+where q<sub>min</sub> = 0, q<sub>max</sub> = 2<sup>b</sup> &minus; 1, scale = (x<sub>max</sub> &minus; x<sub>min</sub>) / (q<sub>max</sub> &minus; q<sub>min</sub>), and zp = q<sub>min</sub> &minus; x<sub>min</sub> / scale, with x<sub>min</sub> and x<sub>max</sub> being the min and max values contained within the unquantized tensor. Deterministic rounding uses &lfloor;&middot;&rceil;, while stochastic rounding samples an integer above or below according to the fractional part of the prequantized value.
+<br></br>
+To stabilize activation quantization across training, each layer maintains an exponential moving average (EMA) of activation minima and maxima, updated per batch as:
+<div style="text-align:center; font-family:'Courier New',Courier,monospace; font-size:15px; margin:12px 0;">
+  running<sub>min</sub> = (1 &minus; &alpha;) running<sub>min</sub> + &alpha; &middot; min(x<sub>batch</sub>)<br>
+  running<sub>max</sub> = (1 &minus; &alpha;) running<sub>max</sub> + &alpha; &middot; max(x<sub>batch</sub>)
+</div>
+During the forward pass, activations are quantized using running average statistics instead of instantaneous tensor min and max.
 <br></br>
 
             <h2 id="results">Results</h2>
