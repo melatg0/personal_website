@@ -148,6 +148,31 @@ a:hover { color: var(--ink); }
   font-style: italic;
 }
 
+/* home: selected work, links row, updates */
+.see-all {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 0.98rem;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.updates { list-style: none; }
+.updates li {
+  display: flex;
+  gap: 16px;
+  padding: 6px 0;
+  color: var(--ink);
+}
+.updates .date {
+  color: var(--ink-soft);
+  white-space: nowrap;
+  min-width: 96px;
+  flex-shrink: 0;
+}
+
 /* TLDR callout */
 .tldr {
   background: var(--accent-soft);

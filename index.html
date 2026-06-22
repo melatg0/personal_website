@@ -21,29 +21,50 @@
     <div class="name-row">
       <div class="name-col">
         <h1 class="name">Hi, I'm Melat!</h1>
-        <p class="subtitle">I'm an undergrad at MIT studying CS.</p>
+        <p class="subtitle">CS undergrad at MIT</p>
       </div>
       <img class="avatar" src="assets/me.jpeg" alt="A picture of Melat"
            onerror="this.classList.add('avatar-fallback');this.removeAttribute('src');" />
     </div>
 
     <p class="intro">
-      I am enthusiastic about work that advances fair, safe AI that is beneficial to all.
-      In this aspect, I am interested in how language models store, share, and forget knowledge. I currently work on scientific knowledge extraction from language models in <a href="https://lingo.csail.mit.edu/" target="_blank" rel="noopener">Prof. Jacob Andreas's group</a>,
-      and have worked on exclusive unlearning and self-consistency.
-    </p>
-
-    <p class="intro">
-      Take a look at my projects <a href="projects.html">here</a>.
+      I study how language models store, share, and forget knowledge, and whether a model's account of
+      its own reasoning can be made faithful and auditable. I work in
+      <a href="https://lingo.csail.mit.edu/" target="_blank" rel="noopener">Prof. Jacob Andreas's group</a>
+      at MIT CSAIL, currently on two threads: training models so their self-explanations stay consistent
+      with their behavior, and recovering the latent scientific procedures models use to solve domain
+      problems.
     </p>
 
     <section class="section">
+      <h2>Selected work</h2>
+      <ul class="projects">
+        <li>
+          <a class="proj-title" href="projects/self-consistency/index.html">Self-CTRL</a>
+          <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%).</span>
+          <span class="proj-links">
+            <a href="projects/self-consistency/index.html">read more</a>
+            <a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">paper ↗</a>
+          </span>
+        </li>
+        <li>
+          <a class="proj-title" href="projects/scheming/index.html">Action History &amp; Agentic Scheming</a>
+          <span class="proj-desc">1,440-rollout study showing that prior-session reasoning traces push an agent's blackmail rate from 43% to 63%, and that a one-line counterfactual prompt cuts scheming 12–23pp. 1st place @ MAIA AISF Hack SP26.</span>
+          <span class="proj-links">
+            <a href="projects/scheming/index.html">read more</a>
+            <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
+          </span>
+        </li>
+      </ul>
+      <a class="see-all" href="projects.html">see all projects →</a>
+    </section>
+
+    <section class="section">
       <h2>Contact</h2>
-      <p>
-        You can find me on
+      <p class="links">
         <a href="https://www.linkedin.com/in/melatg/" target="_blank" rel="noopener">LinkedIn</a>
-        and
-        <a href="https://scholar.google.com/citations?user=AMY-fAYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>.
+        <a href="https://scholar.google.com/citations?user=AMY-fAYAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+         <a href="https://github.com/melatg0" target="_blank" rel="noopener">GitHub</a>
       </p>
     </section>
 
