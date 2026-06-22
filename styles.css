@@ -103,7 +103,18 @@ a {
 a:hover { color: var(--ink); }
 
 /* projects list */
-.projects { list-style: none; }
+.projects { list-style: none; margin-bottom: 8px; }
+.proj-group {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  margin: 36px 0 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.proj-group:first-of-type { margin-top: 0; }
 .projects li {
   padding: 16px 0;
   border-bottom: 1px solid var(--rule);
@@ -112,6 +123,15 @@ a:hover { color: var(--ink); }
   gap: 2px;
 }
 .proj-title { font-weight: 600; font-size: 1.1rem; }
+.proj-tag {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
 .proj-desc { color: var(--ink-soft); font-size: 1rem; }
 .proj-links {
   display: flex;
