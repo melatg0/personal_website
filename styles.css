@@ -246,6 +246,14 @@ figcaption {
   border-top: 1px solid var(--rule);
   color: var(--ink-soft);
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.foot-globe {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
 }
 
 @media (max-width: 520px) {
