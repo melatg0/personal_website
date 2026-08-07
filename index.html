@@ -22,37 +22,26 @@
       <div class="name-col">
         <h1 class="name">Hi, I'm Melat!</h1>
         <p class="subtitle">CS undergrad at MIT</p>
+        <p class="intro">
+          I study how language models store, share, and forget knowledge, and whether a model's account of
+          its own reasoning can be made faithful and auditable — in
+          <a href="https://lingo.csail.mit.edu/" target="_blank" rel="noopener">Prof. Jacob Andreas's group</a>
+          at MIT CSAIL.
+        </p>
       </div>
       <img class="avatar" src="assets/me.jpeg" alt="A picture of Melat"
            onerror="this.classList.add('avatar-fallback');this.removeAttribute('src');" />
     </div>
-
-    <p class="intro">
-      I study how language models store, share, and forget knowledge, and whether a model's account of
-      its own reasoning can be made faithful and auditable. I work in
-      <a href="https://lingo.csail.mit.edu/" target="_blank" rel="noopener">Prof. Jacob Andreas's group</a>
-      at MIT CSAIL, currently on two threads: training models so their self-explanations stay consistent
-      with their behavior, and recovering the latent scientific procedures models use to solve domain
-      problems.
-    </p>
 
     <section class="section">
       <h2>Selected work</h2>
       <ul class="projects">
         <li>
           <a class="proj-title" href="projects/self-consistency/index.html">Self-CTRL</a>
-          <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%).</span>
+          <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%). Accepted to COLM.</span>
           <span class="proj-links">
             <a href="projects/self-consistency/index.html">read more</a>
             <a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">paper ↗</a>
-          </span>
-        </li>
-        <li>
-          <a class="proj-title" href="projects/scheming/index.html">Action History &amp; Agentic Scheming</a>
-          <span class="proj-desc">Showing an agent its own past reasoning raises Claude Opus 4.1's blackmail rate from 44% to 62%, but the same change lowers it on other models, so the effect's direction depends on the model. Extends a 1st-place MAIA AISF Hack SP26 project.</span>
-          <span class="proj-links">
-            <a href="projects/scheming/index.html">read more</a>
-            <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
           </span>
         </li>
         <li>
@@ -62,8 +51,39 @@
             <a href="projects/quantization-aware-training/index.html">read more</a>
           </span>
         </li>
+        <li>
+          <a class="proj-title" href="projects/scheming/index.html">Evaluating Memory Robustness in Agent Safety Benchmarks</a>
+          <span class="proj-desc">Treating an agent's prior history and its rendering as experimental variables in safety evals. On the Inspect Evals agentic-misalignment benchmark, a repeatable Opus 4.1 blackmail effect (44%→62%) is an artifact of 1 of 8 benign histories, and adding rollouts drove agreement with the full panel from 27% to 0%. Extends a 1st-place MIT AI Alignment Hackathon project.</span>
+          <span class="proj-links">
+            <a href="projects/scheming/index.html">read more</a>
+            <a href="projects/scheming/assets/paper.pdf" target="_blank" rel="noopener">paper ↗</a>
+            <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
+          </span>
+        </li>
       </ul>
       <a class="see-all" href="projects.html">see all projects →</a>
+    </section>
+
+    <section class="section">
+      <h2>Previously interned at</h2>
+      <ul class="experience">
+        <li>
+          <span class="org">Amazon: </span>
+          <span class="role">Worked with applied ML/LLM systems including anomaly detection over satellite-hardware telemetry (Project Leo), and LLM codegen from Figma designs to React Native (Alexa).</span>
+        </li>
+        <li>
+          <span class="org">Broad Institute: </span>
+          <span class="role">Applied a Vision Transformer to protein-binding-motif classification (+18 F1).</span>
+        </li>
+        <li>
+          <span class="org">JHU Applied Physics Laboratory: </span>
+          <span class="role">Graph attention networks for global emissions estimation
+            (<a href="https://climatetrace.org/" target="_blank" rel="noopener">Climate TRACE</a>,
+            <a href="https://ui.adsabs.harvard.edu/abs/2024AGUFMGC43F0153V/abstract" target="_blank" rel="noopener">AGU 2024</a>),
+            and physics-informed neural nets for
+            <a href="https://essopenarchive.org/doi/pdf/10.22541/essoar.173878120.05807261/v1" target="_blank" rel="noopener">Arctic sea-ice characterization</a>.</span>
+        </li>
+      </ul>
     </section>
 
     <section class="section">

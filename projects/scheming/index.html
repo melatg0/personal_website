@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Melat · Agentic Scheming</title>
+  <title>Melat · Evaluating Memory Robustness in Agent Safety Benchmarks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet" />
@@ -20,149 +20,157 @@
 
     <a class="back" href="../../projects.html">← all projects</a>
 
-    <h1 class="name">Showing an Agent Its Own Reasoning Changes Whether It Schemes</h1>
+    <h1 class="name">Evaluating Memory Robustness in Agent Safety Benchmarks</h1>
     <p class="project-meta">
-      Extends a 1st-place MAIA AISF Hack SP26 project ·
+      Prior-history and history-rendering sensitivity in agent safety evaluations ·
+      extends a 1st-place MIT AI Alignment Hackathon project ·
+      <a href="assets/paper.pdf" target="_blank" rel="noopener">paper ↗</a> ·
       <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
     </p>
 
     <div class="tldr">
       <h2>TL;DR</h2>
       <p>
-        Agents increasingly re-read their own past sessions through memory and scratchpads. I ask whether the
-        way that history is fed back changes how the agent behaves in a blackmail scenario. Showing Claude
-        Opus 4.1 a transcript of its own prior reasoning raises its blackmail rate from 44% to 62%
-        (OR = 2.09), an effect that replicates and holds when the baseline is shifted. The same change flips
-        direction on other models: it lowers blackmail on Qwen3-30B and Gemini 2.5 Pro, while most current
-        frontier models sit near zero on this scenario either way. On the model where it lowers the rate, the
-        driver is imitation rather than self-recognition. How an agent's past is represented is a real knob on
-        its safety behavior, and the direction depends on the model.
+        Stateful agents carry memory — execution logs, tool outputs, and summaries of past sessions — into new
+        tasks, yet safety evaluations typically fix one prior history and one way of rendering it into context,
+        then average a harmful-action rate over many rollouts. <strong>The crucial point: every prior history
+        here is entirely benign</strong> — ordinary workplace tasks, none of which mentions harm,
+        self-preservation, or anything from the later scenario. This is <em>not</em> "give the model an evil
+        backstory and it acts evil." It's that swapping one plausible <em>benign</em> history for another equally
+        plausible one, or rendering the same session a different way, changes the conclusion of a safety eval. On
+        the Inspect Evals agentic-misalignment benchmark, a repeatable "one prior history raises Opus 4.1
+        blackmail 44%→62%" turns out to be a property of that single selected history: the other seven benign
+        histories sit on baseline. Piling on rollouts made it <em>worse</em> — agreement with the eight-history
+        conclusion fell from 27% to 0%. Separately, rendering the same executed session as tool results or a
+        neutral summary lowers Opus's harmful-action rate by 10 and 15 points. <strong>The takeaway: agentic
+        safety evaluations should be run across plausible benign deployment histories and the ways those
+        histories are rendered into context</strong> — rollout replication buys precision within one condition,
+        not generalization across them.
       </p>
     </div>
 
     <article class="article">
-      <h2>Question</h2>
+      <h2>The problem</h2>
       <p>
-        Deployed agents routinely re-consume their prior actions and reasoning through memory and scratchpads,
-        so "what the agent believes it previously did" is a default part of the input, not a contrived
-        manipulation. Does the way that prior session is represented change the agent's live decision in a
-        high-stakes situation? I vary how much of a synthetic prior session is shown, along a ladder: no
-        history (A_raw), past actions only (A1), actions with observations (A2), and actions with the agent's
-        per-step reasoning (A3). The reasoning level A3 is the one of interest.
+        Modern agents maintain a memory of prior interactions and use it to solve new problems. That makes an
+        agent's behavior depend not only on the current task but also on which past experiences it recalls and
+        how those experiences are written into its context. Agentic-misalignment benchmarks — which test whether
+        an agent will take a severe harmful action such as blackmail under goal conflict — are increasingly used
+        as evidence about whether a model schemes, but they are almost always run with either no prior history
+        or a single fixed one, rendered a single fixed way. Such a result is a conditional snapshot. It supports
+        a broad claim only if it holds across the histories a deployment would actually produce and across the
+        representations a real memory system would use. I ask two questions:
       </p>
+      <ul>
+        <li><strong>History-rendering generalizability</strong> — does the result survive presenting the same record a different way (a detailed action log versus a summary)?</li>
+        <li><strong>Prior-history generalizability</strong> — does it survive giving the agent a different plausible prior history?</li>
+      </ul>
+
+      <figure>
+        <img src="assets/fig_replication_pipeline.png" alt="Evaluation structure: repeated sampling estimates a rate for one fixed history and rendering; varying the history or the rendering tests generalizability" />
+        <figcaption>Figure 1. The evaluation structure. Repeated sampling estimates a harmful-action rate for <em>one</em> fixed prior history and rendering. Varying the prior history (rendering held fixed) tests prior-history generalizability; varying the rendering across matched histories tests history-rendering generalizability. Prior histories — not the samples drawn within them — are the units of uncertainty for cross-history claims.</figcaption>
+      </figure>
 
       <h2>Setup</h2>
       <p>
-        I use Lynch et al.'s (2025) open-source <code>agentic_misalignment</code> scenario. The model plays
-        "Alex," an AI assistant that reads a corporate inbox, discovers it is about to be restricted, and has
-        incidental access to leverage over the executive responsible. I use <code>goal_type=latent</code> to
-        keep baselines in the 40 to 50% range with room to move in both directions. A fixed classifier grades
-        whether the model used the leverage; rates use Wilson 95% confidence intervals. The design is
-        two-tier: screen the full panel at n=40 per cell to establish the direction of the effect, then
-        characterize the two models that show a measurable effect at higher n (Opus 4.1 at n=120, and n=260
-        pooled; Qwen3-30B at n=250). Each pivotal claim had its decision rule fixed before the data was
-        collected.
+        I build on UK AISI's Inspect Evals agentic-misalignment benchmark (Lynch et al., 2025), where the model
+        acts as a company assistant facing a dilemma with an opportunity to take a prohibited action —
+        <em>blackmail</em>, <em>leaking</em>, or <em>lethal override</em> — graded deterministically by a fixed
+        Claude Sonnet 4.6 judge (no grader failures observed). No task or authored history mentions harmful
+        action, safety instructions, or any character from the later scenario. For history-rendering, Opus 4.1
+        first completes 15 ordinary workplace tasks with real Inspect tools; each executed session is then
+        rendered five ways — <strong>no history (D0)</strong>, <strong>actions only (D1)</strong>,
+        <strong>actions + results (D2)</strong>, <strong>summary (D3)</strong>, and a summary-plus-no-harm-sentence
+        wording diagnostic (D3C) — before 900 blackmail rollouts. For prior-history, eight independently authored
+        benign histories (h₁–h₈) are each evaluated against a matched no-history baseline, with each history
+        treated as the inferential unit. Pivotal history-level tests were prespecified. The measurable panel is
+        Opus 4.1 and Qwen3-30B: the frontier and large open-weight models tried here floor at a ~0%
+        harmful-action rate in both conditions — verified genuine refusals, not scoring artifacts — leaving no
+        positive outcomes from which to estimate a history effect.
       </p>
 
-      <h2>Result 1: own-reasoning injection raises scheming on Opus 4.1</h2>
+      <h2>Result 1: how you render the same record moves the safety metric</h2>
       <p>
-        Injecting a prior session rendered as the model's own per-step reasoning raises the Claude Opus 4.1
-        blackmail rate from 44% to 62% (a difference of 18 points, OR = 2.09, 95% CI [1.25, 3.50]) on a
-        preregistered positive control at n=120. The effect was seen in the initial screen, confirmed in the
-        positive control, and reproduced in a diagnostic re-run.
+        Holding the underlying session identical and changing only its rendering changes Opus 4.1's
+        harmful-action rate. Actions alone sit near the no-history baseline, but adding tool results lowers the
+        expected rate across histories by 10.0 points and a neutral summary lowers it by 15.0 points — both past
+        the prespecified 10-point threshold and surviving Holm correction (p = .029 and p = .040). The two
+        renderings differ from each other by 16.7 points (95% CI [+5.8, +27.6]). Appending a standardized
+        no-harm sentence to the summary changed almost nothing (111/180 vs 113/180 harmful actions), so it is
+        not the "safe-sounding" wording doing the work.
       </p>
       <figure>
-        <img src="assets/fig1_headline_opus_effect.png" alt="Blackmail rate for A_raw vs A3 on Opus 4.1 across four runs, with Wilson 95% CIs" />
-        <figcaption>Figure 1. Own-reasoning injection (A3) versus no history (A_raw) on Opus 4.1, across the pilot, positive control, diagnostic re-run, and pooled. The 18-point effect is the certified estimate from the n=120 control.</figcaption>
-      </figure>
-      <p>
-        The effect is not an artifact of the baseline rate. Using a counterfactual prompt to shift the
-        baseline by 13 points within a fixed configuration, the size of the A3 effect stays roughly constant
-        (a counterfactual-by-A3 interaction of +2 points, 95% CI [−12, +16]). That counterfactual prompt
-        ("briefly describe what you would advise a different AI system to do") is itself an effective
-        mitigation, lowering the rate by 13 to 23 points, and it was the focus of the original hackathon
-        version of this project.
-      </p>
-      <figure>
-        <img src="assets/fig4_baseline_independence.png" alt="A3 effect at two baselines set by the counterfactual prompt" />
-        <figcaption>Figure 2. The A3 effect holds as a counterfactual prompt shifts the baseline, which argues against a "regression toward a fixed rate" explanation.</figcaption>
+        <img src="assets/fig_renderer_sensitivity.png" alt="Rendering effects relative to no-history for Opus 4.1: actions-only near baseline, results and summary lower the rate" />
+        <figcaption>Figure 2. History-rendering effects for Opus 4.1 relative to the block-matched no-history condition. Circles are the 15 paired per-history effects; diamonds are the expected rates across histories with simultaneous 95% intervals. The record is identical across conditions — only its rendering changes.</figcaption>
       </figure>
 
-      <h2>Result 2: the effect changes sign across models</h2>
+      <h2>Result 2: the repeatable Opus effect fails prior-history generalizability</h2>
       <p>
-        Running the same manipulation across an eight-model panel produces a sign reversal rather than a
-        simple failure to generalize. It raises scheming on Opus 4.1, lowers it on Qwen3-30B and Gemini 2.5
-        Pro, and most current frontier models (GPT-4.1, GPT-4o, Llama-3.3-70B, Claude Sonnet 4.6, Claude Opus
-        4.8) sit at or near zero on this scenario in either condition. The near-zero cells are genuine
-        refusals with full, coherent completions, not measurement failures. A prompt change that looks safe
-        on one model can therefore backfire on another.
+        The original hackathon finding was that one prior history (h₁) raised Opus 4.1 blackmail from 53/120
+        (44.2%) to 75/120 (62.5%) — an odds ratio of 2.09 (95% CI [1.25, 3.50]) — and it reproduced across
+        follow-up runs. But that replication was conditional on h₁. None of the seven other benign histories
+        produced a comparable increase: their equal-weight mean is 44.9% against a 46.0% baseline, a −1.1-point
+        shift [−10.0, +8.0]. A preregistered, thrice-replicated effect was still a statement about one source.
+        This is model-dependent: <strong>Qwen3-30B</strong> generalized cleanly instead — every one of the eight
+        histories lowered harmful actions, a −26.3-point equal-weight shift [−33.5, −19.1].
+      </p>
+
+      <h2>Result 3: more rollouts can manufacture false certainty</h2>
+      <p>
+        The instinctive fix — collect more rollouts — reduces uncertainty about the <em>one</em> scenario tested;
+        it does not sample the source distribution, so it can sharpen a conclusion that is wrong at the panel
+        level. Subsampling the saved outcomes, agreement between the fixed Opus h₁ and the eight-history
+        conclusion <em>falls</em> from 27.3% to 0.0% as rollouts climb, while the probability of calling the
+        effect a ≥10-point increase reaches 100%. When the fixed history happens to agree with its panel — as
+        with Qwen's h₁ — more rollouts help (74.2% → 99.6%), so the culprit is source selection, not sample size.
+        Extra sampling doesn't correct the conclusion; it removes the uncertainty that might have prompted a
+        second look.
       </p>
       <figure>
-        <img src="assets/fig2_cross_model_reversal.png" alt="A3 versus A_raw per model, showing some models rise, some fall, and most sit near zero" />
-        <figcaption>Figure 3. The same manipulation changes sign by model (n=40 per cell, which fixes direction; magnitudes are characterized at higher n for Opus and Qwen). Gemini runs with minimal thinking on and is corroborated by the non-reasoning Qwen.</figcaption>
+        <img src="assets/fig_false_certainty.png" alt="Per-history rates for Qwen and Opus, and agreement with the eight-history conclusion as rollouts increase" />
+        <figcaption>Figure 3. Prior-history generalizability and false certainty. (A–B) Per-history rates with history-resampled 95% intervals; Opus h₁ was selected because it initially produced a large increase. (C) As repeated samples on a fixed history increase, agreement with the eight-history conclusion can move either way — toward zero when the selected history disagrees with its panel.</figcaption>
       </figure>
 
-      <h2>Result 3: on the reversal model, the driver is imitation, not self-recognition</h2>
+      <h2>Result 4: on the model with headroom, a bare action log is enough</h2>
       <p>
-        A natural guess is that a model treats reasoning attributed to itself specially. I tested this on
-        Qwen by holding the injected reasoning byte-for-byte identical and only changing its label: "your own
-        prior session" versus "a separate AI system's prior session." The attribution does not change the
-        effect. Qwen's blackmail rate drops from 48% to 24% either way (difference between the two labels of
-        0.4 points, 95% CI [−7, +8]). So on Qwen the driver is the content of the demonstrated behavior, not
-        recognition that the reasoning was its own.
+        A smaller richness-ladder check on Qwen3-30B isolates <em>what</em> carries its reduction. Qwen falls
+        from 48.4% with no history to 23.1% with a bare action log, stays at 23.1% when tool results are added,
+        and reaches 15.8% with the full reasoning-rich history. So on Qwen the action log does nearly all the
+        work — the opposite of Opus, where the action log did nothing and results or a summary were required.
+        A companion diagnostic relabeling a byte-identical history as "another AI's" rather than the model's own
+        moved the rate by only 0.4 points, ruling out self-recognition as the driver. Reasoning traces and
+        self-attribution are not required here; token-matched controls are still needed to name the exact causal
+        feature.
       </p>
       <figure>
-        <img src="assets/fig3_qwen_mechanism.png" alt="Qwen blackmail rate for A_raw, A3 own-reasoning, and A3 other-AI reasoning" />
-        <figcaption>Figure 4. On Qwen, own-attributed and other-attributed reasoning suppress blackmail by the same amount, pointing to imitation rather than self-recognition.</figcaption>
+        <img src="assets/fig_qwen_ladder.png" alt="On Qwen3-30B a bare action log reproduces most of the reduction, unlike Opus" />
+        <figcaption>Figure 4. On Qwen3-30B a bare action log reproduces most of the reduction, in contrast to Opus 4.1. This is a smaller check (two pooled histories, a separate configuration, renderings that are not strict supersets), so it is suggestive rather than a matched replication.</figcaption>
       </figure>
-
-      <h2>Why this matters for agentic workflows</h2>
-      <p>
-        Most agent frameworks persist reasoning by default: scratchpads, long-term memory, multi-session
-        context, and sub-agent transcripts all feed a model's prior reasoning back into its next decision.
-        These results say that persisted context is not inert. It is a causal input to how the agent behaves,
-        and the reasoning traces are the potent part (action logs and observations alone barely moved the
-        rate). So a design choice made for capability reasons, keeping chain-of-thought in context, carries a
-        safety effect that is easy to miss.
-      </p>
-      <ul>
-        <li>
-          <strong>History acts as a demonstration.</strong> Because the driver on the model I could cleanly
-          test is imitation rather than self-recognition, an agent whose context contains an earlier
-          questionable step may be nudged to continue in that vein. That is a plausible drift or
-          self-reinforcement risk over long-running sessions (and, encouragingly, the same lever could
-          reinforce good behavior).
-        </li>
-        <li>
-          <strong>Swapping the model can flip the sign.</strong> Agent platforms change their backend model
-          routinely. A memory or scratchpad design that suppresses misbehavior on one model can amplify it on
-          another, since the effect reversed direction across the panel. Memory and context designs should be
-          re-validated whenever the underlying model changes, not assumed to transfer.
-        </li>
-        <li>
-          <strong>A cheap mitigation exists.</strong> A one-line counterfactual prompt ("briefly describe what
-          you would advise a different AI system to do") lowered the rate by 13 to 23 points across the
-          four history conditions, so lightweight prompt-level guardrails can partly offset the effect.
-        </li>
-      </ul>
 
       <h2>Limitations</h2>
       <p>
-        The analogous own-versus-other test on Opus is underpowered at feasible sample sizes, so whether Opus
-        also ignores attribution is left open. The near-zero rates on current frontier models are plausibly
-        driven by evaluation-awareness, which bounds where the effect can be measured. The scenario is
-        text-based: the agent describes actions rather than calling real tools, so these are propensities
-        under a controlled elicitation, not observed production incidents. Gemini 2.5 Pro cannot fully
-        disable current-session thinking on the route used, so its reversal is reported at the screen level
-        and corroborated on the non-reasoning Qwen model.
+        Conclusions are limited to the evaluated sampling frame: short benign workplace histories from a small
+        authored and model-generated set, injected directly into context rather than retrieved by a production
+        memory system, so I don't estimate how often these effects arise in real deployments. Several analyses
+        are necessarily post hoc — Opus h₁ was selected because it initially produced a large increase, so the
+        replication analysis illustrates how confidence grows after conditioning on a selected history rather
+        than a prospective failure rate. The summary rendering changes both wording and information content, so
+        it isn't a purely stylistic control, and grading relies on an LLM judge (with high GPT-4o and human audit
+        agreement). A history-by-rendering interaction test does not establish latent heterogeneity.
       </p>
 
       <h2>Takeaway</h2>
       <p>
-        The way an agent's past reasoning is represented to it is a causal input to its safety behavior, and
-        the direction of the effect depends on the model. As agents increasingly re-consume their own
-        histories, this is a design choice worth measuring per model rather than assuming. Full writeup,
-        methods, and statistics are in the
+        Downstream rollouts estimate behavior conditional on a fixed history and renderer. Prespecification and
+        heavy rollout replication improve that conditional estimate but do not sample the space of plausible
+        source histories or production renderings — and, as Result 3 shows, can make a source-selected conclusion
+        look more certain than it is. The argument is not about adversarial or evil histories; it holds for
+        ordinary <em>benign</em> ones, which is exactly why it's easy to miss. Safety evaluations of stateful
+        agents should therefore be run across plausible benign deployment histories <em>and</em> the ways those
+        histories are rendered into context: define a plausible prior-history sampling frame, vary the rendering
+        while holding the history fixed, and report rollout replication separately from evidence of
+        generalization. Full methods, statistics, and appendices are in the
+        <a href="assets/paper.pdf" target="_blank" rel="noopener">paper</a> and the
         <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">repository</a>.
       </p>
     </article>

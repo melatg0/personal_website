@@ -20,32 +20,37 @@
 
     <a class="back" href="../../projects.html">← all projects</a>
 
-    <h1 class="name">Pyvene/nnsight Integration</h1>
+    <h1 class="name">Pyvene × nnsight Integration</h1>
     <p class="project-meta">
-      MIT CSAIL · Jacob Andreas Lab ·
+      Remote, batched interventions for interpretability · in collaboration with Stanford NLP ·
       <a href="https://github.com/melatg0/pyvene" target="_blank" rel="noopener">code ↗</a>
     </p>
 
     <article class="article">
       <h2>Overview</h2>
       <p>
-        Pyvene is an open-source toolkit for intervening on the internal activations of language models,
-        a core tool for interpretability research. I built remote and batched execution for pyvene on
-        NDIF's HPC GPU cluster, so that interventions can run against models hosted remotely rather than
-        being limited to whatever fits on a local machine.
-      </p>
-      <p>
-        This unlocks large-scale intervention experiments across most open-weight models, letting
-        researchers probe and steer model internals at a scale that was previously impractical. The work
-        is being upstreamed in collaboration with Stanford NLP.
+        <a href="https://github.com/stanfordnlp/pyvene" target="_blank" rel="noopener">pyvene</a> is Stanford
+        NLP's open-source library for intervening on the internal states of PyTorch models — the operation
+        underlying activation steering, model editing, and much of mechanistic interpretability. Until now its
+        interventions ran locally, so the model you could study was bounded by what fit on your own GPU.
       </p>
 
-      <h2>Highlights</h2>
-      <ul>
-        <li>Remote + batched execution for pyvene on NDIF's HPC GPU cluster.</li>
-        <li>Large-scale intervention experiments enabled across most open-weight models.</li>
-        <li>Upstreaming the integration with Stanford NLP.</li>
-      </ul>
+      <h2>What I built</h2>
+      <p>
+        I integrated pyvene with <a href="https://nnsight.net/" target="_blank" rel="noopener">nnsight</a> and
+        the National Deep Inference Fabric (NDIF), giving pyvene a <strong>remote execution backend</strong>:
+        interventions are dispatched to models hosted on NDIF's HPC GPU cluster instead of loaded locally. I also
+        added <strong>batched execution</strong> so many intervention configurations run in a single pass rather
+        than one at a time.
+      </p>
+
+      <h2>Why it matters</h2>
+      <p>
+        Together these remove the two limits that kept intervention experiments small. Researchers can now run
+        interventions against most open-weight models — including ones far too large for a local machine — and
+        sweep many interventions at once, making large-scale steering and interpretability studies practical that
+        previously were not. The integration is being upstreamed in collaboration with Stanford NLP.
+      </p>
     </article>
 
     <footer class="foot">

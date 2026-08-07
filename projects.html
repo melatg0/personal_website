@@ -25,7 +25,7 @@
       <li>
         <span class="proj-tag">2026 · Research</span>
         <a class="proj-title" href="projects/self-consistency/index.html">Self-CTRL</a>
-        <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%).</span>
+        <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%). Accepted to COLM.</span>
         <span class="proj-links">
           <a href="projects/self-consistency/index.html">read more</a>
           <a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">paper ↗</a>
@@ -33,11 +33,22 @@
       </li>
       <li>
         <span class="proj-tag">2026 · Research</span>
-        <a class="proj-title" href="projects/scheming/index.html">Action History &amp; Agentic Scheming</a>
-        <span class="proj-desc">Showing an agent its own past reasoning raises Claude Opus 4.1's blackmail rate from 44% to 62%, but the same change lowers it on other models, so the effect's direction depends on the model. Extends a 1st-place MAIA AISF Hack SP26 project.</span>
+        <a class="proj-title" href="projects/scheming/index.html">Evaluating Memory Robustness in Agent Safety Benchmarks</a>
+        <span class="proj-desc">Treating an agent's prior history and its rendering as experimental variables in safety evals, not fixed constants. On the Inspect Evals agentic-misalignment benchmark, a repeatable Opus 4.1 blackmail effect (44%→62%) is an artifact of 1 of 8 benign histories, and adding rollouts drove agreement with the full panel from 27% to 0%; rendering the same session as a summary shifts the rate 15 points. Argues evals should sample plausible benign deployment histories and their renderings. Extends a 1st-place MIT AI Alignment Hackathon project.</span>
         <span class="proj-links">
           <a href="projects/scheming/index.html">read more</a>
+          <a href="projects/scheming/assets/paper.pdf" target="_blank" rel="noopener">paper ↗</a>
           <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
+        </span>
+      </li>
+      <li>
+        <span class="proj-tag">2026 · Research</span>
+        <a class="proj-title" href="projects/secret-loyalties/index.html">Detecting Secret Loyalties</a>
+        <span class="proj-desc">SFT'd a Qwen2.5-7B model with a concealed loyalty to a fictional company, then built a generate–filter–retrain distillation pipeline to show that distillation degrades concealment. Across 48 measurements the loyalty survives but concealment collapses (92% → 71–89%) while a content-matched control holds flat (91–96%), with no overlap. Two negative results: an activation probe that detects training-run identity rather than loyalty, and a loyalty-score rise that is a selection artifact. Apart × Formation Research sprint.</span>
+        <span class="proj-links">
+          <a href="projects/secret-loyalties/index.html">read more</a>
+          <a href="https://docs.google.com/viewerng/viewer?url=https://framerforms.s3.us-east-1.amazonaws.com/form-uploads/54707c3c-b1b6-4e6a-97d5-ea52e6547ca1-Secret-Loyalties-Hackathon-Final-Project.pdf" target="_blank" rel="noopener">paper ↗</a>
+          <a href="https://github.com/mesamelly/Generational-Concealment-Detection" target="_blank" rel="noopener">code ↗</a>
         </span>
       </li>
       <li>
@@ -54,7 +65,7 @@
     <ul class="projects">
       <li>
         <span class="proj-tag">2025 · Tool</span>
-        <a class="proj-title" href="projects/pyvene-nnsight/index.html">Pyvene/nnsight Integration</a>
+        <a class="proj-title" href="projects/pyvene-nnsight/index.html">Pyvene × nnsight Integration</a>
         <span class="proj-desc">Remote + batched execution for the pyvene interpretability toolkit on NDIF's HPC GPU cluster, unlocking large-scale intervention experiments across most open-weight models. Upstreaming with Stanford NLP.</span>
         <span class="proj-links">
           <a href="projects/pyvene-nnsight/index.html">read more</a>

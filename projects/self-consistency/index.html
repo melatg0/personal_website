@@ -22,31 +22,64 @@
 
     <h1 class="name">Self-CTRL</h1>
     <p class="project-meta">
-      Self-Consistency Training with Reinforcement Learning · MIT CSAIL · Jacob Andreas Lab ·
-      <a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">paper ↗</a>
+      Self-Consistency Training with Reinforcement Learning · MIT CSAIL, Jacob Andreas Lab · accepted to COLM ·
+      <a href="https://arxiv.org/abs/2606.18327" target="_blank" rel="noopener">paper ↗</a>
     </p>
 
-    <article class="article">
-      <h2>Overview</h2>
+    <div class="tldr">
+      <h2>TL;DR</h2>
       <p>
-        Language models often explain their behavior in ways that don't match what they actually do. This
-        project develops a policy-gradient method that trains models to be consistent between their
-        self-explanations and their behavior, so that a model's stated reasoning is a faithful account of
-        how it actually acts.
+        Language models explain their own behavior in ways that don't match what they actually do, which makes
+        those explanations useless for auditing. Self-CTRL is a reinforcement-learning method that optimizes for
+        <em>consistency</em> between a model's self-explanations and its behavior on related inputs — either
+        updating the explanation to predict the behavior, or updating the behavior to match the explanation. On a
+        Constitutional-AI refusal domain it raises a third-party auditor's ability to predict the model's refusals
+        from 36% to 92% and cuts the HarmBench attack-success rate from 15.0% to 0.5%, without substantially
+        increasing refusals on harmless prompts. Work with Itamar Pres, Laura Ruis, Belinda Z. Li, and Jacob
+        Andreas.
       </p>
+    </div>
+
+    <article class="article">
+      <h2>The problem</h2>
       <p>
-        The approach improves joint consistency from 43% to 96%, and as a safety benefit, reduces the
-        HarmBench failure rate from 15.0% to 0.5%. The work is written up in
-        <em><a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">Self-CTRL:
-        Self-Consistency Training with Reinforcement Learning</a></em>.
+        If you want to audit a language model, one natural thing to do is ask it to explain itself. But a model's
+        stated reasoning is often not a faithful account of how it actually acts — it can describe one decision
+        rule while following another. That gap makes self-explanation unreliable exactly where it would be most
+        useful: a third party trying to predict what the model will do from what it says about itself.
       </p>
 
-      <h2>Highlights</h2>
-      <ul>
-        <li>Policy-gradient training that aligns model explanations with model behavior.</li>
-        <li>Joint consistency improved from 43% to 96%.</li>
-        <li>HarmBench failure rate reduced from 15.0% to 0.5%.</li>
-      </ul>
+      <h2>Method</h2>
+      <p>
+        Self-CTRL trains for <em>self-consistency</em>: the model's explanation of its own policy should predict
+        its behavior on related inputs, and vice versa. The training signal is bidirectional — consistency can be
+        achieved either by revising the explanation to match behavior or by revising the behavior to match the
+        explanation — and it is optimized with a policy-gradient objective. Crucially, the signal is the model's
+        own agreement with itself, so no ground-truth labels for the "correct" explanation are required.
+      </p>
+
+      <h2>Results</h2>
+      <p>
+        On a probabilistic-reasoning task (imitating biased samplers), Self-CTRL raises the correlation between
+        the model's self-reported bias and its actual behavioral bias from R² = 0.24 to R² = 0.64 on held-out
+        distributions — matching the generalization of direct ground-truth supervision, without using those
+        labels.
+      </p>
+      <p>
+        On a Constitutional-AI refusal domain, it raises a third-party auditor's accuracy at predicting the
+        model's refusals from 36% to 92%. As a safety side effect of that alignment, the HarmBench attack-success
+        rate drops from 15.0% to 0.5% — a 30× reduction — without substantially raising refusals on harmless
+        prompts.
+      </p>
+
+      <h2>Why it matters</h2>
+      <p>
+        Making a model's self-account match its behavior turns self-explanation into something an external auditor
+        can actually rely on, and it does so using the model's own consistency rather than expensive labeled
+        supervision. Full method, experiments, and appendices are in the paper,
+        <em><a href="https://arxiv.org/abs/2606.18327" target="_blank" rel="noopener">Self-CTRL:
+        Self-Consistency Training with Reinforcement Learning</a></em> (accepted to COLM).
+      </p>
     </article>
 
     <footer class="foot">
