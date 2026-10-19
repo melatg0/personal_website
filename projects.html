@@ -24,8 +24,18 @@
     <ul class="projects">
       <li>
         <span class="proj-tag">2026 · Research</span>
+        <a class="proj-title" href="projects/scheming/index.html">Prior-History Sensitivity in Agentic Safety Evaluations</a>
+        <span class="proj-desc">First-author paper accepted to REALM @ EMNLP 2026. Across eight benign histories, a repeatable Opus 4.1 blackmail increase (44% → 62%) appears only under one selected history, showing why agent-safety evaluations should sample plausible deployment histories.</span>
+        <span class="proj-links">
+          <a href="projects/scheming/index.html">read more</a>
+          <a href="projects/scheming/assets/paper.pdf" target="_blank" rel="noopener">REALM paper ↗</a>
+          <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
+        </span>
+      </li>
+      <li>
+        <span class="proj-tag">2026 · Research</span>
         <a class="proj-title" href="projects/self-consistency/index.html">Self-CTRL</a>
-        <span class="proj-desc">Policy-gradient training that aligns what LMs say with what they do, lifting explanation–behavior consistency from 43% to 96% and cutting HarmBench failures 30× (15.0% → 0.5%). Accepted to COLM.</span>
+        <span class="proj-desc">Co-authored a policy-gradient method that makes language-model self-explanations predict behavior. It raises third-party refusal prediction from 36% to 92% and reduces HarmBench attack success from 15.0% to 0.5%. Contributed talk at the Actionable Interpretability Workshop @ COLM 2026.</span>
         <span class="proj-links">
           <a href="projects/self-consistency/index.html">read more</a>
           <a href="https://arxiv.org/pdf/2606.18327" target="_blank" rel="noopener">paper ↗</a>
@@ -33,18 +43,8 @@
       </li>
       <li>
         <span class="proj-tag">2026 · Research</span>
-        <a class="proj-title" href="projects/scheming/index.html">Evaluating Memory Robustness in Agent Safety Benchmarks</a>
-        <span class="proj-desc">Treating an agent's prior history and its rendering as experimental variables in safety evals, not fixed constants. On the Inspect Evals agentic-misalignment benchmark, a repeatable Opus 4.1 blackmail effect (44%→62%) is an artifact of 1 of 8 benign histories, and adding rollouts drove agreement with the full panel from 27% to 0%; rendering the same session as a summary shifts the rate 15 points. Argues evals should sample plausible benign deployment histories and their renderings. Extends a 1st-place MIT AI Alignment Hackathon project.</span>
-        <span class="proj-links">
-          <a href="projects/scheming/index.html">read more</a>
-          <a href="projects/scheming/assets/paper.pdf" target="_blank" rel="noopener">paper ↗</a>
-          <a href="https://github.com/melatg0/action-history-scheming/tree/main" target="_blank" rel="noopener">code ↗</a>
-        </span>
-      </li>
-      <li>
-        <span class="proj-tag">2026 · Research</span>
         <a class="proj-title" href="projects/secret-loyalties/index.html">Detecting Secret Loyalties</a>
-        <span class="proj-desc">SFT'd a Qwen2.5-7B model with a concealed loyalty to a fictional company, then built a generate–filter–retrain distillation pipeline to show that distillation degrades concealment. Across 48 measurements the loyalty survives but concealment collapses (92% → 71–89%) while a content-matched control holds flat (91–96%), with no overlap. Two negative results: an activation probe that detects training-run identity rather than loyalty, and a loyalty-score rise that is a selection artifact. Apart × Formation Research sprint.</span>
+        <span class="proj-desc">Fine-tuned Qwen2.5-7B to conceal a fictional corporate loyalty, then built a generate–filter–retrain pipeline to test whether distillation exposes it. Across 48 measurements, concealment falls from 92% to 71–89% while a matched control remains at 91–96%. Apart × Formation Research sprint.</span>
         <span class="proj-links">
           <a href="projects/secret-loyalties/index.html">read more</a>
           <a href="https://docs.google.com/viewerng/viewer?url=https://framerforms.s3.us-east-1.amazonaws.com/form-uploads/54707c3c-b1b6-4e6a-97d5-ea52e6547ca1-Secret-Loyalties-Hackathon-Final-Project.pdf" target="_blank" rel="noopener">paper ↗</a>
@@ -54,7 +54,7 @@
       <li>
         <span class="proj-tag">2026 · Research</span>
         <a class="proj-title" href="projects/knowledge-extraction/index.html">Scientific Knowledge Extraction</a>
-        <span class="proj-desc">Recovering the latent scientific procedures LMs use to solve domain problems, surfacing model-discovered structure as auditable scientific claims.</span>
+        <span class="proj-desc">Ongoing research asking whether an agent can recover a scientific equation from a model's predictions using a small number of informative queries.</span>
         <span class="proj-links">
           <a href="projects/knowledge-extraction/index.html">read more</a>
         </span>
@@ -66,7 +66,7 @@
       <li>
         <span class="proj-tag">2025 · Tool</span>
         <a class="proj-title" href="projects/pyvene-nnsight/index.html">Pyvene × nnsight Integration</a>
-        <span class="proj-desc">Remote + batched execution for the pyvene interpretability toolkit on NDIF's HPC GPU cluster, unlocking large-scale intervention experiments across most open-weight models. Upstreaming with Stanford NLP.</span>
+        <span class="proj-desc">Built remote, batched execution for Stanford NLP's model-intervention library by connecting pyvene to NNsight and NDIF's multi-node GPU cluster. The backend enables parallel interventions on open-weight models too large to load locally.</span>
         <span class="proj-links">
           <a href="projects/pyvene-nnsight/index.html">read more</a>
           <a href="https://github.com/melatg0/pyvene" target="_blank" rel="noopener">code ↗</a>
@@ -75,7 +75,7 @@
       <li>
         <span class="proj-tag">2025 · Course</span>
         <a class="proj-title" href="projects/quantization-aware-training/index.html">Scheduled Quantization-Aware Training as a Full-Precision Regularizer</a>
-        <span class="proj-desc">Treating quantization noise as a regularizer for full-precision models. On ResNet-32/CIFAR-10, a stochastic geometric (4→32) schedule reaches 84.8% validation accuracy and a smaller generalization gap than full-precision baselines. Final project for 6.7960 at MIT.</span>
+        <span class="proj-desc">Tested low-precision training as regularization on ResNet-32/CIFAR-10. The best fixed stochastic 4-bit run reaches 85.6% validation accuracy (+5.8 points over the unregularized full-precision baseline), while the best 4→32 schedule reaches 84.8%. MIT 6.7960 final project.</span>
         <span class="proj-links">
           <a href="projects/quantization-aware-training/index.html">read more</a>
         </span>

@@ -524,7 +524,7 @@ Each schedule is run with both deterministic and stochastic rounding to separate
 <br></br>
 Stochastic rounding generally offers a better trade-off: it preserves or improves test accuracy while reducing or maintaining the generalization gap.
 <br></br>
-The stochastic geometric (4→32) schedule is the best-performing configuration, which starts at low precision and increases bitwidth over time: it reaches 100% training accuracy and 84.8% validation accuracy, with a gap of 0.152. The stochastic geometric (32→4) and linear (32→4) schedules also perform competitively, with validation accuracies of 79.6% and 80.7% and relatively small gaps (0.111 and 0.117 respectively), though with much lower validation accuracies.
+The stochastic geometric (4→32) schedule is the best-performing scheduled configuration. It starts at low precision and increases bitwidth over time, reaching 100% training accuracy and 84.8% validation accuracy with a gap of 0.152. The stochastic geometric (32→4) and linear (32→4) schedules reach 79.6% and 80.7% validation accuracy with smaller gaps (0.111 and 0.117 respectively), but neither matches the best fixed stochastic 4-bit run.
 <br></br>
 Among deterministic schedules, the geometric backward run attains 100% training accuracy and 84.1% validation accuracy with a gap of 0.159-substantially better than the deterministic linear schedules and the deterministic cosine schedule, both of which either underfit (low validation accuracy) or suffer from larger gaps.
 <br></br>
